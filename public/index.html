@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RankQuest — Sign in</title>
+<link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <div class="auth-wrap">
+    <p class="serif" style="font-size:26px; text-align:center; margin-bottom:22px;">RankQuest</p>
+
+    <div class="auth-card">
+      <h1 class="auth-title" id="formTitle">Welcome back</h1>
+      <p class="auth-sub" id="formSub">Log in to keep climbing.</p>
+
+      <div id="errorBox" class="error-box" style="display:none;"></div>
+
+      <form id="authForm">
+        <div class="field">
+          <label>Username</label>
+          <input type="text" id="username" autocomplete="username" required />
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" id="password" autocomplete="current-password" required />
+        </div>
+        <button type="submit" class="btn btn-block" id="submitBtn">Log in</button>
+      </form>
+
+      <p class="auth-switch" id="switchLine">
+        New here? <a id="switchLink">Create an account</a>
+      </p>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/login.js"></script>
+</body>
+</html>

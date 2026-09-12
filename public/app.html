@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RankQuest</title>
+<link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <p class="who">Signed in as <b id="whoName">…</b></p>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <a href="/admin.html" id="adminLink" style="display:none; font-size:12px; color:var(--muted-2);">Admin</a>
+        <button class="btn-danger-outline" id="logoutBtn" style="font-size:12px; text-decoration:underline;">Log out</button>
+      </div>
+    </div>
+
+    <div class="rank-card">
+      <div class="rank-badge" id="rankBadge">•</div>
+      <div class="rank-info">
+        <div class="row">
+          <h1 class="rank-name" id="rankName">—</h1>
+          <span class="pts" id="rankPts">0 pts</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+        <p class="progress-note" id="progressNote"></p>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="overview">Overview</button>
+      <button class="tab-btn" data-tab="daily">Daily</button>
+      <button class="tab-btn" data-tab="goals">Goals</button>
+      <button class="tab-btn" data-tab="bucket">Bucket List</button>
+    </div>
+
+    <!-- Overview -->
+    <div class="section active" id="section-overview">
+      <div class="stat-grid">
+        <div class="stat-card"><div class="val" id="statStreak">0d</div><div class="lbl">Streak</div></div>
+        <div class="stat-card"><div class="val" id="statToday">0/0</div><div class="lbl">Today</div></div>
+        <div class="stat-card"><div class="val" id="statBucket">0</div><div class="lbl">Bucket wins</div></div>
+      </div>
+
+      <div class="card">
+        <h2 class="serif" style="font-size:14px; margin-bottom:8px;">✦ The Oracle</h2>
+        <p class="oracle-text" id="oracleText">Ask for a read on where you stand.</p>
+        <button class="btn" id="oracleBtn" style="font-size:12px; padding:8px 14px;">Consult the Oracle</button>
+      </div>
+
+      <p class="hint" style="text-align:left; margin-top:16px; margin-bottom:8px;">Rank ladder</p>
+      <div class="card" id="ladderCard"></div>
+    </div>
+
+    <!-- Daily -->
+    <div class="section" id="section-daily">
+      <div class="add-row">
+        <input type="text" id="dailyInput" placeholder="Add a daily quest…" />
+        <button class="btn" id="dailyAddBtn">Add</button>
+      </div>
+      <div class="subtabs" data-section="daily">
+        <button class="subtab-btn active" data-sub="todo">To do</button>
+        <button class="subtab-btn" data-sub="done">Completed</button>
+      </div>
+      <div id="dailyList"></div>
+      <p class="hint">Daily quests expire at day's end — miss one and you lose 10-50% of its points. Streak grows when you complete at least one per day.</p>
+    </div>
+
+    <!-- Goals -->
+    <div class="section" id="section-goals">
+      <div class="add-row">
+        <input type="text" id="goalInput" placeholder="Add a personal goal…" />
+      </div>
+      <div class="deadline-row">
+        <input type="datetime-local" id="goalDeadline" />
+        <button class="btn" id="goalAddBtn">Add</button>
+      </div>
+      <div class="subtabs" data-section="goals">
+        <button class="subtab-btn active" data-sub="todo">To do</button>
+        <button class="subtab-btn" data-sub="done">Completed</button>
+      </div>
+      <div id="goalList"></div>
+      <p class="hint">Miss your deadline and you lose 10-50% of the goal's points.</p>
+    </div>
+
+    <!-- Bucket list -->
+    <div class="section" id="section-bucket">
+      <div class="add-row">
+        <input type="text" id="bucketInput" placeholder="Add a bucket-list item…" />
+      </div>
+      <div class="deadline-row">
+        <input type="datetime-local" id="bucketDeadline" />
+        <button class="btn" id="bucketAddBtn">Add</button>
+      </div>
+      <div class="subtabs" data-section="bucket">
+        <button class="subtab-btn active" data-sub="todo">To do</button>
+        <button class="subtab-btn" data-sub="done">Completed</button>
+      </div>
+      <div id="bucketList"></div>
+      <p class="hint">Miss your deadline and you lose 10-50% of the item's points.</p>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="rankUpModal" style="display:none;">
+    <div class="modal-card">
+      <div class="rank-badge" id="rankUpBadge" style="margin:0 auto 12px;">•</div>
+      <p class="hint" style="margin-bottom:2px;">Rank up</p>
+      <h2 class="serif" id="rankUpName" style="font-size:20px; margin-bottom:16px;"></h2>
+      <button class="btn btn-block" id="rankUpClose">Continue</button>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RankQuest — Admin</title>
+<link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <div class="wrap" style="max-width:640px;">
+    <div class="topbar">
+      <p class="who">Admin dashboard — <b id="whoName">…</b></p>
+      <div style="display:flex; gap:14px; align-items:center;">
+        <a href="/app.html" style="font-size:12px; color:var(--muted-2);">Back to app</a>
+        <button class="btn-danger-outline" id="logoutBtn" style="font-size:12px; text-decoration:underline;">Log out</button>
+      </div>
+    </div>
+
+    <h1 class="serif" style="font-size:22px; margin:18px 0 4px;">All users</h1>
+    <p class="hint" style="text-align:left; margin-bottom:14px;">Tap a row to see that user's tasks.</p>
+
+    <div class="card" style="padding:0; overflow-x:auto;">
+      <table class="admin-table" id="usersTable">
+        <thead>
+          <tr><th>User</th><th>Rank</th><th>Points</th><th>Streak</th><th>Daily</th><th>Goals</th><th>Bucket</th></tr>
+        </thead>
+        <tbody id="usersBody"><tr><td colspan="7" class="loading">Loading…</td></tr></tbody>
+      </table>
+    </div>
+
+    <div id="detailPanel" style="display:none; margin-top:20px;">
+      <h2 class="serif" style="font-size:16px; margin-bottom:10px;">Tasks for <span id="detailUser"></span></h2>
+      <div id="detailList"></div>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>
