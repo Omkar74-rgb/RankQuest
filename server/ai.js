@@ -1,17 +1,52 @@
 const CLAUDE_MODEL = "claude-sonnet-5";
-const GROK_MODEL = process.env.GROK_MODEL || "grok-4.3"; // see https://docs.x.ai/developers/models for current options
+const GROK_MODEL = process.env.GROK_MODEL || "grok-4.3"; // xAI — see https://docs.x.ai/developers/models
+const GROQ_MODEL = process.env.GROQ_MODEL || "llama-3.3-70b-versatile"; // Groq — see https://console.groq.com/docs/models
 
-// Picks a provider based on what's configured. Set AI_PROVIDER=grok or
-// AI_PROVIDER=anthropic explicitly to force one; otherwise it auto-picks
-// Grok if GROK_API_KEY is set, else Anthropic.
+// Picks a provider based on what's configured. Set AI_PROVIDER=grok, groq,
+// or anthropic explicitly to force one; otherwise it auto-picks Groq if
+// GROQ_API_KEY is set, else Grok if GROK_API_KEY is set, else Anthropic.
+// Note: Groq (groq.com, keys start "gsk_") and Grok/xAI (x.ai, keys start
+// "xai-") are different companies — easy to mix up, so this keeps them separate.
 function activeProvider() {
   const explicit = (process.env.AI_PROVIDER || "").toLowerCase();
-  if (explicit === "grok" || explicit === "anthropic") return explicit;
-  return process.env.GROK_API_KEY ? "grok" : "anthropic";
+  if (["grok", "groq", "anthropic"].includes(explicit)) return explicit;
+  if (process.env.GROQ_API_KEY) return "groq";
+  if (process.env.GROK_API_KEY) return "grok";
+  return "anthropic";
 }
 
 async function callAI(system, prompt, maxTokens = 500) {
-  return activeProvider() === "grok" ? callGrok(system, prompt, maxTokens) : callClaude(system, prompt, maxTokens);
+  const provider = activeProvider();
+  if (provider === "groq") return callGroq(system, prompt, maxTokens);
+  if (provider === "grok") return callGrok(system, prompt, maxTokens);
+  return callClaude(system, prompt, maxTokens);
+}
+
+async function callGroq(system, prompt, maxTokens = 500) {
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) throw new Error("GROQ_API_KEY is not set");
+
+  const resp = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model: GROQ_MODEL,
+      max_tokens: maxTokens,
+      messages: [
+        { role: "system", content: system },
+        { role: "user", content: prompt },
+      ],
+    }),
+  });
+
+  if (!resp.ok) throw new Error(`Groq API responded with ${resp.status}`);
+  const data = await resp.json();
+  const text = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
+  if (!text) throw new Error("Empty AI response");
+  return text;
 }
 
 async function callClaude(system, prompt, maxTokens = 500) {

@@ -28,7 +28,7 @@ const Api = (() => {
 
     const resp = await fetch(`/api${path}`, { ...options, headers });
 
-    if (resp.status === 401) {
+    if (resp.status === 401 && t) {
       clearSession();
       if (!location.pathname.endsWith("index.html") && location.pathname !== "/") {
         location.href = "/index.html";
